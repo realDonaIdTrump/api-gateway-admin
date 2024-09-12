@@ -21,10 +21,14 @@ import MailIcon from "@mui/icons-material/Mail";
 import VectorIcon from "./VectorIcon";
 import ViewSidebarRoundedIcon from "@mui/icons-material/ViewSidebarRounded";
 import LottieAnimation from "../components/LottieAnimation";
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import Introduction from './Introduction';
-import Settings from './Settings';
-import Logs from './Logs';
+import { Routes, Route, Link, useLocation } from "react-router-dom";
+import Introduction from "./Introduction";
+import Settings from "./Settings";
+import Logs from "./Logs";
+import HomeIcon from "@mui/icons-material/Home";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import vectorAnimationData from "../lotties/Vector_Logo_black_red_RGB.json"; // Path to your vector animation
 
 const drawerWidth = 240;
 
@@ -110,7 +114,7 @@ export default function Navigation() {
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
   const [selectedPage, setSelectedPage] = React.useState("Introduction");
-  
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -121,18 +125,20 @@ export default function Navigation() {
 
   const handlePageChange = (page) => {
     setSelectedPage(page);
+    console.log(page);
+    
   };
 
   const renderContent = () => {
     switch (selectedPage) {
       case "Introduction":
-        return <Introduction />;
+        return <Introduction onNavigateToSettings={() => handlePageChange("Settings")} />;
       case "Settings":
         return <Settings />;
       case "Logs":
         return <Logs />;
       default:
-        return <Introduction />;
+        return <Introduction onNavigateToSettings={() => handlePageChange("Settings")} />;
     }
   };
 
@@ -167,7 +173,7 @@ export default function Navigation() {
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader sx={{ justifyContent: "space-between" }}>
-          <LottieAnimation sx={{ ml: 1 }} />
+          <LottieAnimation animationData={vectorAnimationData} sx={{ ml: 1 }} />
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ViewSidebarRoundedIcon sx={{ color: "#B70032" }} />
@@ -187,6 +193,14 @@ export default function Navigation() {
                   {
                     minHeight: 48,
                     px: 2.5,
+                    borderRight:
+                      selectedPage === text
+                        ? "2px solid #B70032"
+                        : "2px solid transparent", // Tab-like bottom border
+                    color: selectedPage === text ? "#B70032" : "inherit", // Text color for the selected page
+                    "&:hover": {
+                      backgroundColor: "transparent", // Remove background highlight on hover
+                    },
                   },
                   open
                     ? {
@@ -202,6 +216,7 @@ export default function Navigation() {
                     {
                       minWidth: 0,
                       justifyContent: "center",
+                      color: selectedPage === text ? "#B70032" : "inherit", // Icon color matches the selected state
                     },
                     open
                       ? {
@@ -212,7 +227,9 @@ export default function Navigation() {
                         },
                   ]}
                 >
-                  {text === "Introduction" ? <InboxIcon /> : <MailIcon />}
+                  {text === "Introduction" && <HomeIcon />}
+                  {text === "Settings" && <SettingsIcon />}
+                  {text === "Logs" && <ListAltIcon />}
                 </ListItemIcon>
                 <ListItemText
                   primary={text}
@@ -224,6 +241,9 @@ export default function Navigation() {
                       : {
                           opacity: 0,
                         },
+                    {
+                      color: selectedPage === text ? "#B70032" : "inherit", // Text color matches the selected state
+                    },
                   ]}
                 />
               </ListItemButton>
