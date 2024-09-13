@@ -108,7 +108,7 @@ const Introduction = ({ onNavigateToSettings, isDrawerOpen }) => {
                 margin: { xs: '0 auto', sm: '0' }, // Center on smaller screens
               }}
             >
-              <LottieAnimation animationData={settingAnimationData} />
+              <LottieAnimation animationData={settingAnimationData} loop={true} />
             </Box>
           </Box>
           <Box
@@ -119,7 +119,7 @@ const Introduction = ({ onNavigateToSettings, isDrawerOpen }) => {
               margin: { xs: '0 auto', sm: '0' }, // Center on smaller screens
             }}
           >
-            <LottieAnimation animationData={introductionAnimationData} />
+            <LottieAnimation animationData={introductionAnimationData} loop={true}/>
           </Box>
         </Box>
       </Box>

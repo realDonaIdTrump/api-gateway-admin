@@ -1,9 +1,9 @@
 import React from 'react';
 import Lottie from 'react-lottie';
 
-function LottieAnimation({ animationData }) {
+function LottieAnimation({ animationData, loop=false}) {
   const defaultOptions = {
-    loop: true,
+    loop: loop,
     autoplay: true,
     animationData: animationData,
   };
