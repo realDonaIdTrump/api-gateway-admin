@@ -12,3 +12,4 @@ function LottieAnimation({ animationData, loop=false}) {
 }
 
 export default LottieAnimation;
+  
