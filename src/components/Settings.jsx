@@ -160,7 +160,7 @@ export default function Settings() {
 
     //construct user wopi inputs into url
     const wopiUrl = `${wopi.wopiProtocol}://${wopi.wopiHost}:${wopi.port}/browser/${wopi.wopiModel}/cool.html?WOPISrc=`;
-
+    const apiUrl = process.env.REACT_APP_API_URL;
     const configBeanList = {
       configBeanList: [
         { key: "serverApi", value: serverApiUrl },
@@ -175,7 +175,7 @@ export default function Settings() {
     console.log(configBeanList);
     try {
       const response = await axios.post(
-        "http://localhost:8085/config/updateConfig",
+        `${apiUrl}/config/updateConfig`,
         configBeanList,
         {
           headers: {
