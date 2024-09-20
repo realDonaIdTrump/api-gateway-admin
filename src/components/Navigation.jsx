@@ -173,7 +173,7 @@ export default function Navigation() {
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader sx={{ justifyContent: "space-between" }}>
-          <LottieAnimation animationData={vectorAnimationData} sx={{ ml: 1 }} />
+          <LottieAnimation animationData={vectorAnimationData} sx={{ ml: 1 }} loop={true}/>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ViewSidebarRoundedIcon sx={{ color: "#B70032" }} />

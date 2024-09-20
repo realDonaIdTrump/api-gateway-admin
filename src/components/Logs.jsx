@@ -111,6 +111,9 @@ export default function LogTable() {
           },
           "& .MuiButtonBase-root": {
             color: "#D3D3D3", // Change the button color to white (including menu icon)
+            "&:hover": {
+              color: "#A9A9A9", // Change fill color on hover
+            },
           },
         }}
       />

@@ -17,6 +17,11 @@ import stepFinishAnimationData from "../lotties/stepFinish.json";
 import LottieAnimation from "../components/LottieAnimation";
 import axios from "axios"; // Import axios or your preferred HTTP client
 import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress
+import jamaIcon from "../assets/jama_icon.png";
+import feishuIcon from "../assets/feishu_icon.png";
+import jiraIcon from "../assets/jira_icon.png";
+import polarionIcon from "../assets/polarion_icon.png";
+import codebeamerIcon from "../assets/codebeamer_icon.png";
 
 const steps = [
   {
@@ -377,7 +382,6 @@ export default function Settings() {
                     onChange={handleChange}
                     fullWidth
                     sx={{ mb: 2 }}
-                    helperText={!serverApi.port && "Port is required"}
                   />
                   <StyledTextField
                     required
@@ -410,11 +414,77 @@ export default function Settings() {
                     fullWidth
                     sx={{ mb: 2 }}
                   >
-                    <MenuItem value="Feishu">Feishu</MenuItem>
-                    <MenuItem value="Jama">Jama</MenuItem>
-                    <MenuItem value="Jira">Jira</MenuItem>
-                    <MenuItem value="CodeBeamer">CodeBeamer</MenuItem>
-                    <MenuItem value="Polarion">Polarion</MenuItem>
+                    <MenuItem value="Feishu">
+                      <img
+                        src={feishuIcon}
+                        alt="feishu"
+                        style={{
+                          width: "20px",
+                          height: "20px",
+                          marginRight: "8px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                        }}
+                      />
+                      Feishu
+                    </MenuItem>
+                    <MenuItem value="Jama">
+                      <img
+                        src={jamaIcon}
+                        alt="jama"
+                        style={{
+                          width: "20px",
+                          height: "20px",
+                          marginRight: "8px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                        }}
+                      />
+                      Jama
+                    </MenuItem>
+                    <MenuItem value="Jira">
+                      <img
+                        src={jiraIcon}
+                        alt="jira"
+                        style={{
+                          width: "20px",
+                          height: "20px",
+                          marginRight: "8px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                        }}
+                      />
+                      Jira
+                    </MenuItem>
+                    <MenuItem value="CodeBeamer">
+                      <img
+                        src={codebeamerIcon}
+                        alt="codeBeamer"
+                        style={{
+                          width: "20px",
+                          height: "20px",
+                          marginRight: "8px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                        }}
+                      />
+                      CodeBeamer
+                    </MenuItem>
+                    <MenuItem value="Polarion">
+                      {" "}
+                      <img
+                        src={polarionIcon}
+                        alt="polarion"
+                        style={{
+                          width: "20px",
+                          height: "20px",
+                          marginRight: "8px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                        }}
+                      />
+                      Polarion
+                    </MenuItem>
                   </StyledTextField>
 
                   {tool.thirdPartyTool && (
