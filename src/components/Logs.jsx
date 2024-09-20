@@ -50,31 +50,26 @@ export default function LogTable() {
       field: "id",
       headerName: "ID",
       flex: 0.1,
-      headerClassName: "super-app-theme--header",
     },
     {
       field: "logLevel",
       headerName: "Log Level",
       flex: 0.3,
-      headerClassName: "super-app-theme--header",
     },
     {
       field: "logContext",
       headerName: "Log Context",
       flex: 5,
-      headerClassName: "super-app-theme--header",
     },
     {
       field: "createdAt",
       headerName: "Created At",
       flex: 0.5,
-      headerClassName: "super-app-theme--header",
     },
     {
       field: "logAddress",
       headerName: "Log Address",
       flex: 1,
-      headerClassName: "super-app-theme--header",
     },
   ];
 
@@ -83,10 +78,6 @@ export default function LogTable() {
       sx={{
         height: "85vh",
         width: "100%",
-        "& .super-app-theme--header": {
-          backgroundColor: "#B70032",
-          color: "white",
-        },
       }}
     >
       <DataGrid
@@ -103,6 +94,24 @@ export default function LogTable() {
         sx={{
           border: 0,
           overflow: "hidden",
+          "& .MuiDataGrid-columnHeader": {
+            backgroundColor: "#B70032",
+            color: "white",
+          },
+          "& .MuiDataGrid-columnSeparator": {
+            "& svg": {
+              // Target the SVG within the separator
+              "& rect": {
+                fill: "white", // Default fill
+                "&:hover": {
+                  fill: "white !important", // Change fill color on hover
+                },
+              },
+            },
+          },
+          "& .MuiButtonBase-root": {
+            color: "#D3D3D3", // Change the button color to white (including menu icon)
+          },
         }}
       />
     </Paper>
