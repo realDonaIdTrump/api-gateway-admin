@@ -1,117 +1,110 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-  CircularProgress, Typography, Pagination, Box
-} from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
+import React, { useState, useEffect } from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import Paper from "@mui/material/Paper";
+import axios from "axios";
+import { format } from "date-fns"; // Import date formatting function
+import "../styles/table.css"; // Import the CSS file
 
-// Styled table header for modern look
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  backgroundColor: theme.palette.primary.main || '#B70032', // Fallback color if theme is undefined
-  color: theme.palette.common.white,
-  fontWeight: 'bold',
-}));
-
-const Log = () => {
+export default function LogTable() {
   const [logs, setLogs] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
-  const [totalPages, setTotalPages] = useState(1);
-  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8085';
-
-  useEffect(() => {
-    fetchLogs();
-  }, [page, size]);
-
-  const fetchLogs = async () => {
-    setLoading(true);
-    setError(null);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 20,
+  });
+  const [rowCount, setRowCount] = useState(0);
+  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8085";
+  // Function to fetch logs from backend
+  const fetchLogs = async (page, size) => {
     try {
-      const response = await axios.post(`${apiUrl}/log/findAllLog`, { page, size });
-      setLogs(response.data.data.content);
-      setTotalPages(response.data.data.totalPages);  // Assuming totalPages is available in response
-      setLoading(false);
+      const response = await axios.post(`${apiUrl}/log/findAllLog`, {
+        page,
+        size,
+      });
+      if (response.data.code === "200") {
+        const startIndex = page * size; // Calculate starting index for the current page
+        setLogs(
+          response.data.data.content.map((log, index) => ({
+            id: startIndex + index + 1, // Dynamically number rows
+            logLevel: log.logLevel,
+            logContext: log.logContext,
+            createdAt: log.createdAt
+              ? format(new Date(log.createdAt), "yyyy-MM-dd HH:mm:ss")
+              : "N/A",
+            logAddress: log.logAddress, // Assuming 'id' represents the log address
+          }))
+        );
+        setRowCount(response.data.data.totalElements);
+      }
     } catch (error) {
-      setLoading(false);
-      setError('Error fetching logs');
-      console.error('Error fetching logs:', error);
+      console.error("Error fetching logs:", error);
     }
   };
 
-  const handlePageChange = (event, value) => {
-    setPage(value - 1);  // Adjusting page to be 0-indexed
-  };
+  useEffect(() => {
+    // Fetch logs when the component loads or pagination changes
+    fetchLogs(paginationModel.page, paginationModel.pageSize);
+  }, [paginationModel]);
+
+  const columns = [
+    {
+      field: "id",
+      headerName: "ID",
+      flex: 0.1,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "logLevel",
+      headerName: "Log Level",
+      flex: 0.3,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "logContext",
+      headerName: "Log Context",
+      flex: 5,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "createdAt",
+      headerName: "Created At",
+      flex: 0.5,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "logAddress",
+      headerName: "Log Address",
+      flex: 1,
+      headerClassName: "super-app-theme--header",
+    },
+  ];
 
   return (
-    <Box sx={{ p: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Logs Overview
-      </Typography>
-
-      {loading && (
-        <Box display="flex" justifyContent="center" alignItems="center" sx={{ my: 2 }}>
-          <CircularProgress />
-        </Box>
-      )}
-
-      {error && (
-        <Typography color="error" align="center">
-          {error}
-        </Typography>
-      )}
-
-      {!loading && !error && (
-        <>
-          <TableContainer component={Paper} sx={{ maxHeight: '70vh' }}>
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>No.</StyledTableCell>
-                  <StyledTableCell>Created At</StyledTableCell>
-                  <StyledTableCell>Log Level</StyledTableCell>
-                  <StyledTableCell>Log Context</StyledTableCell>
-                  <StyledTableCell>Log Return</StyledTableCell>
-                  <StyledTableCell>Log Address</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {logs.length > 0 ? (
-                  logs.map((log, index) => (
-                    <TableRow hover key={log.id}>
-                      <TableCell>{index + 1}</TableCell>  {/* Displaying ascending numbers */}
-                      <TableCell>{new Date(log.createdAt).toLocaleString()}</TableCell>
-                      <TableCell>{log.logLevel}</TableCell>
-                      <TableCell>{log.logContext}</TableCell>
-                      <TableCell>{log.logReturn}</TableCell>
-                      <TableCell>{log.logAddress}</TableCell>  {/* New column for log_address */}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={6} align="center">
-                      No logs found
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-
-          <Box display="flex" justifyContent="center" sx={{ my: 2 }}>
-            <Pagination
-              count={totalPages}
-              page={page + 1}  // 1-indexed for Material UI Pagination
-              onChange={handlePageChange}
-              color="primary"
-            />
-          </Box>
-        </>
-      )}
-    </Box>
+    <Paper
+      sx={{
+        height: "85vh",
+        width: "100%",
+        "& .super-app-theme--header": {
+          backgroundColor: "#B70032",
+          color: "white",
+        },
+      }}
+    >
+      <DataGrid
+        rows={logs}
+        columns={columns}
+        getRowClassName={(params) =>
+          params.row.logLevel === "ERROR" ? "error-log" : ""
+        }
+        rowCount={rowCount}
+        pageSizeOptions={[5, 10, 20]}
+        paginationMode="server"
+        paginationModel={paginationModel}
+        onPaginationModelChange={(model) => setPaginationModel(model)}
+        sx={{
+          border: 0,
+          overflow: "hidden",
+        }}
+      />
+    </Paper>
   );
-};
-
-export default Log;
+}
