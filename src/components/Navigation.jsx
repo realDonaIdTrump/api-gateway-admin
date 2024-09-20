@@ -25,10 +25,12 @@ import { Routes, Route, Link, useLocation } from "react-router-dom";
 import Introduction from "./Introduction";
 import Settings from "./Settings";
 import Logs from "./Logs";
+import Monitor from "./MonitorPage";
 import HomeIcon from "@mui/icons-material/Home";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import vectorAnimationData from "../lotties/Vector_Logo_black_red_RGB.json"; // Path to your vector animation
+import MonitorIcon from '@mui/icons-material/Monitor';
 
 const drawerWidth = 240;
 
@@ -137,6 +139,8 @@ export default function Navigation() {
         return <Settings />;
       case "Logs":
         return <Logs />;
+      case "Monitor":
+        return <Monitor />;
       default:
         return <Introduction onNavigateToSettings={() => handlePageChange("Settings")} />;
     }
@@ -185,7 +189,7 @@ export default function Navigation() {
 
         <Divider />
         <List>
-          {["Introduction", "Settings", "Logs"].map((text, index) => (
+          {["Introduction", "Settings", "Logs", "Monitor"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 onClick={() => handlePageChange(text)}
@@ -230,6 +234,7 @@ export default function Navigation() {
                   {text === "Introduction" && <HomeIcon />}
                   {text === "Settings" && <SettingsIcon />}
                   {text === "Logs" && <ListAltIcon />}
+                  {text === "Monitor" && <MonitorIcon />}
                 </ListItemIcon>
                 <ListItemText
                   primary={text}
